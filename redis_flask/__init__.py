@@ -1,7 +1,6 @@
 from redis import Redis as RedisBase
 from flask import Flask
 
-from typing import Awaitable
 from abc import ABC
 
 
@@ -62,22 +61,6 @@ class RedisI(BaseFlaskRedis):
 
         # Adicionar a extensão ao app
         app.extensions["redis"] = self
-
-    def get_client(self):
-        """
-        Retorna o cliente Redis configurado.
-        """
-        if not self.redis_client:
-            raise RuntimeError(
-                "Redis client is not initialized. Did you forget to call init_app?"
-            )
-        return self.redis_client
-
-    def hgetall(self, name) -> Awaitable[dict] | dict:
-        return self.redis_client.hgetall(name)
-
-    def hset(self, name, key, value):
-        self.redis_client.hset(name, key, value)
 
     def __getattr__(self, name: str):
         return getattr(self.redis_client, name)
