@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "redis_flask"
-version = "0.0.1"
+version = "0.0.2"
 description = "Redis extension for Flask app"
 authors = ["Robotz213 <nicholas@robotz.dev>"]
 readme = "README.md"

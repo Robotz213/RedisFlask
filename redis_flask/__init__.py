@@ -10,8 +10,18 @@ class BaseFlaskRedis(RedisBase, ABC):
     ...
 
 
-class RedisI(BaseFlaskRedis):
+class Redis(BaseFlaskRedis):
     """A simple extension for Flask."""
+
+    url_redis = ""
+
+    @property
+    def redis_url(self):
+        return self.url_redis
+
+    @redis_url.setter
+    def redis_url(self, new_url: str):
+        self.url_redis = new_url
 
     def __init__(self, app: Flask = None):
         """
