@@ -11,13 +11,132 @@ Flask = "^3.1.0"
 redis = "^5.2.0"
 
 [tool.poetry.group.dev.dependencies]
-flake8 = "^7.1.1"
-isort = "^5.13.2"
-black = "^24.10.0"
 ruff = "^0.8.1"
 pre-commit = "^4.0.0"
-mypy = "^1.13.0"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+preview = true
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "site-packages",
+    "venv",
+    "tests",
+]
+
+# Same as Black.
+line-length = 120
+indent-width = 4
+
+[tool.ruff.lint]
+preview = true
+select = ["A", "B", "C", "D", "E", "F", "G", "I", "N", "Q", "S", "T", "W"]
+
+extend-select = [
+    "ANN",
+    "ASYNC",
+    # "BLE",
+    # "FBT",
+    "COM",
+    # "CPY",
+    # "DTZ",
+    # "EM",
+    "EXE",
+    # "FA",
+    "ISC",
+    "ICN",
+    "LOG",
+    # "INP",
+    "PIE",
+    # "UP",
+    "PYI",
+    "PT",
+    "RSE",
+    # "RET",
+    "SLF",
+    "SLOT",
+    # "SIM",
+    # "TID",
+    # "TC",
+    "INT",
+    # "ARG",
+    # "PTH",
+    "TD",
+    "FIX",
+    # "ERA",
+    # "PD",
+    "PGH",
+    # "PL",
+    # "TRY",
+    # "FLY",
+    "NPY",
+    # "AIR",
+    # "PERF",
+    # "FURB",
+    # "DOC",
+    # "RUF",
+]
+
+ignore = ["COM812", "D203", "D211", "D212", "D213"]
+
+# Allow fix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+unfixable = []
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+
+[tool.ruff.format]
+# Like Black, use double quotes for strings.
+quote-style = "double"
+
+# Like Black, indent with spaces, rather than tabs.
+indent-style = "space"
+
+# Like Black, respect magic trailing commas.
+skip-magic-trailing-comma = false
+
+# Like Black, automatically detect the appropriate line ending.
+line-ending = "auto"
+
+# Enable auto-formatting of code examples in docstrings. Markdown,
+# reStructuredText code/literal blocks and doctests are all supported.
+#
+# This is currently disabled by default, but it is planned for this
+# to be opt-out in the future.
+docstring-code-format = true
+
+# Set the line length limit used when formatting code snippets in
+# docstrings.
+#
+# This only has an effect when the `docstring-code-format` setting is
+# enabled.
+docstring-code-line-length = "dynamic"

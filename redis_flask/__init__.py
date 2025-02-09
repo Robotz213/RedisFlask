@@ -1,39 +1,57 @@
-from redis import Redis as RedisBase
-from flask import Flask
+"""Module to create a simple extension for Flask | Quart."""
 
 from abc import ABC
+from typing import TYPE_CHECKING, Any  # noqa: D104
+
+from redis import Redis as RedisBase  # type: ignore # noqa: I001, PGH003
+
+if TYPE_CHECKING:
+    try:
+        from flask import Flask  # type: ignore # noqa: F401, I001, PGH003
+    except ImportError:
+        try:
+            from quart import Quart  # type: ignore # noqa: F401, I001, PGH003
+
+        except ImportError:
+            raise ImportError("You need to install Flask or Quart to use this library.") from None
 
 
 class BaseFlaskRedis(RedisBase, ABC):
-    """Base of Flask Redis."""
-
-    ...
+    """Base of  Redis_Alchemy."""
 
 
 class Redis(BaseFlaskRedis):
-    """A simple extension for Flask."""
+    """A simple extension for Flask | Quart."""
 
     url_redis = ""
 
     @property
-    def redis_url(self):
+    def redis_url(self) -> str:
+        """Property to get the Redis URL.
+
+        Returns:
+            str: Redis URL.
+
+        """
         return self.url_redis
 
     @redis_url.setter
-    def redis_url(self, new_url: str):
+    def redis_url(self, new_url: str) -> None:
         self.url_redis = new_url
 
-    def __init__(self, app: Flask = None):
-        """
-        Inicializa a extensão FlaskRedis. Se um app for fornecido, ele é configurado.
-        """
+    def __init__(self, app: Any = None) -> None:  # noqa: ANN401
+        """Initialize the Redis extension."""
         self.redis_client = None
         if app:
             self.init_app(app)
 
-    def init_app(self, app: Flask):
+    def init_app(self, app: Any) -> None:  # noqa: ANN401
         """
-        Configura o Redis com base nas configurações do app Flask.
+        Configure the redis extension.
+
+        Args:
+            app (Flask | Quart): Application default (Flask | Quart).
+
         """
         # Obter configurações individuais
         redis_params = {
@@ -44,9 +62,7 @@ class Redis(BaseFlaskRedis):
             "socket_timeout": app.config.get("REDIS_SOCKET_TIMEOUT"),
             "socket_connect_timeout": app.config.get("REDIS_SOCKET_CONNECT_TIMEOUT"),
             "socket_keepalive": app.config.get("REDIS_SOCKET_KEEPALIVE"),
-            "socket_keepalive_options": app.config.get(
-                "REDIS_SOCKET_KEEPALIVE_OPTIONS"
-            ),
+            "socket_keepalive_options": app.config.get("REDIS_SOCKET_KEEPALIVE_OPTIONS"),
             "retry_on_timeout": app.config.get("REDIS_RETRY_ON_TIMEOUT", False),
             "encoding": app.config.get("REDIS_ENCODING", "utf-8"),
             "decode_responses": app.config.get("REDIS_DECODE_RESPONSES", True),
@@ -65,12 +81,11 @@ class Redis(BaseFlaskRedis):
                 redis_url, **{k: v for k, v in redis_params.items() if v is not None}
             )
         else:
-            self.redis_client = RedisBase(
-                **{k: v for k, v in redis_params.items() if v is not None}
-            )
+            self.redis_client = RedisBase(**{k: v for k, v in redis_params.items() if v is not None})
 
         # Adicionar a extensão ao app
         app.extensions["redis"] = self
 
-    def __getattr__(self, name: str):
+    def __getattr__(self, name: str) -> Any:  # noqa: ANN401
+        """Get attribute of the Redis client."""
         return getattr(self.redis_client, name)
