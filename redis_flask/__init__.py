@@ -39,13 +39,13 @@ class Redis(BaseFlaskRedis):
     def redis_url(self, new_url: str) -> None:
         self.url_redis = new_url
 
-    def __init__(self, app: Any = None) -> None:  # noqa: ANN401
+    def __init__(self, app: Flask | Quart = None) -> None:  # noqa: ANN401
         """Initialize the Redis extension."""
         self.redis_client = None
         if app:
             self.init_app(app)
 
-    def init_app(self, app: Any) -> None:  # noqa: ANN401
+    def init_app(self, app: Flask | Quart) -> None:  # noqa: ANN401
         """
         Configure the redis extension.
 
